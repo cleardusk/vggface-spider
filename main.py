@@ -4,6 +4,7 @@
 import re
 import os
 import sys
+import requests
 
 
 def get_prefix(s=''):
@@ -62,6 +63,45 @@ def str2file(s='', filename='down.sh', num_line=None):
         print 'convert string to file failed'
         sys.exit()
 
+class Downloader():
+    def __init__(self):
+        self.session = requests.Session()
+        self.init()
+
+    def init(self):
+        header = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36'}
+        self.session.headers.update(header)
+
+    def download(self, url=None, id=None, folder_name=None):
+        try:
+            if not os.path.exists(folder_name):
+                os.mkdir(folder_name)
+            ret = self.session.get(url).content
+            filepath = os.path.join(folder_name, id)
+            open(filepath, 'w').write(ret)
+        except:
+            print 'URL: %s downloaded error' % url
+            # sys.exit()
+
+    def download_batch(self, urls=None, ids=None, folder_name=None, num=None):
+        if len(urls) != len(ids):
+            print 'urls and ids not match'
+            sys.exit()
+
+        i = 0
+        for url, id in zip(urls, ids):
+            self.download(url, id, folder_name)
+            i += 1
+            if not num and i > num: break
+
+def test4():
+    filepath = 'vgg_face_dataset/files/A.J._Buckley.txt'
+    (folder_name, urls, ids) = get_info(filepath)
+
+    d = Downloader()
+    d.download_batch(urls, ids, folder_name, 10)
+
+
 
 def test3():
     filepath = 'vgg_face_dataset/files/A.J._Buckley.txt'
@@ -95,8 +135,8 @@ def test():
 def main():
     # test()
     # test2()
-    test3()
-
+    # test3()
+    test4()
 
 if __name__ == '__main__':
     main()
