@@ -69,6 +69,7 @@ class Downloader():
         self.init()
 
     def init(self):
+        requests.packages.urllib3.disable_warnings()
         header = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36'}
         self.session.headers.update(header)
 
@@ -78,7 +79,8 @@ class Downloader():
                 os.mkdir(folder_name)
             ret = self.session.get(url).content
             filepath = os.path.join(folder_name, id)
-            open(filepath, 'w').write(ret)
+            if not os.path.exists(filepath):
+                open(filepath, 'w').write(ret)
         except:
             print 'URL: %s downloaded error' % url
             # sys.exit()
@@ -92,7 +94,7 @@ class Downloader():
         for url, id in zip(urls, ids):
             self.download(url, id, folder_name)
             i += 1
-            if not num and i > num: break
+            if num and i > num: break
 
 def test4():
     filepath = 'A.J._Buckley.txt'
