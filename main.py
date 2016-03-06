@@ -95,7 +95,7 @@ class Downloader():
             if not num and i > num: break
 
 def test4():
-    filepath = 'vgg_face_dataset/files/A.J._Buckley.txt'
+    filepath = 'A.J._Buckley.txt'
     (folder_name, urls, ids) = get_info(filepath)
 
     d = Downloader()
