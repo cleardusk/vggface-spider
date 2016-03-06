@@ -39,12 +39,13 @@ def get_info(filepath=None):
 
 
 def gen_wget_scripts(urls=None, ids=None, folder_name=None):
+    header = 'User-Agent: Mozilla/5.0 (Windows NT 6.0) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11'
     if len(urls) != len(ids):
         return
     script = ''
     for url, id in zip(urls, ids):
         out_path = os.path.join(folder_name, id)
-        script += 'wget -c -t 3 %s -O %s\n' % (url, out_path)
+        script += 'wget --header="%s" -c -t 3 %s -O %s\n' % (header, url, out_path)
     return script
 
 
@@ -79,7 +80,7 @@ def test2():
 
 
 def test():
-    filepath = 'vgg_face_dataset/files/A.J._Buckley.txt'
+    filepath = 'vgg_face_dataset/files/:q.txt'
     (folder_name, urls, ids) = get_info(filepath)
     # print folder_name
     # print len(urls)
