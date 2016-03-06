@@ -45,7 +45,8 @@ def gen_wget_scripts(urls=None, ids=None, folder_name=None):
     script = ''
     for url, id in zip(urls, ids):
         out_path = os.path.join(folder_name, id)
-        script += 'wget --keep-session-cookies --header="%s" -c -t 3 %s -O %s\n' % (header, url, out_path)
+        # script += 'wget --keep-session-cookies --header="%s" -c -t 3 %s -O %s\n' % (header, url, out_path)
+        script += 'wget %s -O %s\n' % (url, out_path)
     return script
 
 
